@@ -1,4 +1,4 @@
-#include "globle.h"
+#include "global.h"
 #include <math.h>
 #ifndef ChuanXing
 #include<omp.h>
@@ -12,7 +12,7 @@ inline double func(double t, double yy, double v) {
 #endif
 #ifdef ChuanXing
 /*v=dy/dt,d^2y/dt^2=func*/
-void DiTui(double* yy, double* v) {
+void DiTui(double t, double* yy, double* v) {
     double k1, k2, k3, k4, l1, l2, l3, l4;
     k1 = dt * (*v);
     l1 = dt * func(t,*yy, *v);
@@ -25,11 +25,11 @@ void DiTui(double* yy, double* v) {
     *yy = *yy + (k1 + 2 * k2 + 2 * k3 + k4) / 6;
     *v = *v + (l1 + 2 * l2 + 2 * l3 + l4) / 6;
 }
-void caculate(double yy,double v,double x) {
-    for (int j = 0; j < NUM;j++) {
+void calculate(double yy,double v,double x) {
+    for (int j = 0; j < NUM;) {
         yrem[j] = yy;
-        rk4(t, &yy, &v);
-        t += dt;
+        DiTui(x, &yy, &v);
+        x += dt;
         j++;
     }
 }
